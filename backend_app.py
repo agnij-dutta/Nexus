@@ -91,7 +91,13 @@ def login():
         if login_auth == True:
             session['contacts'] = blockchain.current_block.contacts
             session['index'] = blockchain.current_block.index
-            session['user'] = Peer(session[username], get_remote_address(), request.environ['REMOTE_PORT'])
+            if get_remote_address() == blockchain.current_block.ip:
+                session['user'] = Peer(session[username], blockchain.current_block.ip, request.environ['REMOTE_PORT'])
+            else:
+                blockchain.current_block.ip = get_remote_address()
+                blockchain.used_names[session['username']] = blockchain.current_block.ip
+                session['user'] = Peer(session[username], blockchain.current_block.ip, request.environ['REMOTE_PORT'])
+                
             # Set the user's session cookie to permanent
             session.permanent = True
 
