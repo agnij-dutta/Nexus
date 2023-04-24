@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" text="text/scss" href="{{ url_for('static', filename='chat.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+	<title>chat</title>
+</head>
+<body>
+    <div class='container'>
+        <!-- msg-header section starts -->
+        <div class="msg-header">
+          <div class="container1">
+
+              <div class="active ">
+                  <p>{{Username}}</p>
+              </div>
+
+          </div>
+
+
+      </div>
+      <!-- msg-header section ends -->
+
+      <!-- Chat inbox  -->
+      <div class="chat-page">
+          <div class="msg-inbox">
+              <div class="chats">
+
+                  <!-- Message container -->
+                  <div class="msg-page">
+                      <!-- Incoming messages -->
+
+                      <div class="received-chats">
+                          <div class="received-msg">
+                              <div class="received-msg-inbox">
+                                  <p>{{message}}</p>
+                                  <span class="time">{{timestamp}} </span>
+                              </div>
+                          </div>
+                      </div>
+                      <!-- Outgoing messages -->
+                      <div class="outgoing-chats">
+                          <div class="outgoing-msg">
+                              <div class="outgoing-chats-msg">
+                          <div class="outgoing-chats">
+                          <div class="outgoing-msg">
+                              <div class="outgoing-chats-msg">
+                                  <p>{{sent_message}}</p>
+
+                                  <span class="time">{{timestamp}} </span>
+                              </div>
+                          </div>
+                      </div>
+
+
+
+                  </div>
+              </div>
+
+              <!-- msg-bottom section -->
+
+
+              <div class="msg-bottom">
+
+                  <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Write message...">
+
+                      <span class="input-group-text send-icon "><i class="bi bi-send "></i>
+                          </span>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+</body>
+
+</html>

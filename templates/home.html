@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" text="text/css" href="{{ url_for('static', filename='home.css') }}">
+	<title>Home Page</title>
+</head>
+<body>
+
+  <header id="header">
+    <div id="navIcon">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <nav class="nav-container" id="navHomeCustom">
+          <ul class="nav-ul"></ul>
+        </nav>
+        <nav class="nav-container hidden" id="navHomeRegular">
+          <ul class="nav-ul"></ul>
+        </nav>
+    <form action = "/chat/" method="post">
+      <input class="cod" type="text" name="search" placeholder="Search">
+      <input class="coding" type="submit" value="🔍"><br>
+      <a href="/add_contact/" class="coding">Add Contact</a> <br>
+    </form>
+
+  </header>
+
+	<canvas id="Matrix"></canvas>
+    <main id="main">
+      <p class="head">Contacts</p><br>
+      {% for contact in contacts %}
+      <a href="/chat?contact={{contact}}" class="coding">{{contact}}</a><br>
+      {% endfor %}
+	  </main>
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+    <script type="text/javascript">
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      var grd = ctx.createLinearGradient(0, 0, 600, 600);
+
+      grd.addColorStop(0, "#FF0000");
+      grd.addColorStop(1, "#00FF00");
+
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, 600, 600);
+    </script>
+</body>
+</html>
