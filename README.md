@@ -1,5 +1,4 @@
 # Nexus
-
 Nexus Online This is a simple social network web app built using Python and Flask that leverages blockchain technology to store user accounts and messages as transactions. Each user is treated as a ledger and each message as a transaction. The app uses proof of work to validate transactions and ensure the security and integrity of the blockchain.
 
 Installation
