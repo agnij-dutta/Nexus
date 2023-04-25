@@ -58,8 +58,9 @@ class Block:
 
 #Child class 1: Handles users as blocks
 class UserBlock(Block):
-    def __init__(self, index, timestamp, previous_hash, username, key, ip, contacts = dict()):
+    def __init__(self, index, timestamp, previous_hash, username, key, ip, port, contacts = dict()):
         self.username = username
+        self.port = port
         self.timestamp = timestamp
         self.ip = ip
         self.key = key
@@ -98,12 +99,13 @@ class Blockchain:
                     index=block_data['index'],
                     ip= block_data['ip_address'],
                     timestamp=block_data['timestamp'],
+                    port=block_data['port'],
                     key = "", 
                     previous_hash=block_data['previous_hash'],
                     username=block_data['username']
                 )
-                self.used_names.append(block_data['username'])
-                self.user_ids[block_data['username']] = block_data['ip_address']
+                self.used_names[block_data['user_name']] = [block_data['ip_address'], block_data['port']]
+                self.user_ids.append(user_id)
                 block.data = block_data['data']
                 block.hash = block_data['hash']
                 block.nonce = block_data['nonce']
@@ -114,12 +116,12 @@ class Blockchain:
         return chain
 
 
-    def add_user(self, username, key, ip):
+    def add_user(self, username, key, ip, port):
         previous_block = self.chain[-1]
         index = previous_block.index + 1
         timestamp = date.datetime.now()
         self.validate_chain()   
-        block = UserBlock(index, timestamp, previous_block.hash, username=username, key=key, ip=ip)
+        block = UserBlock(index, timestamp, previous_block.hash, username=username, key=key, ip=ip, port=port)
         block.mine_block(self.difficulty)
         encrypted_dict = encrypt.encrypt_dict(json.dumps(block.data), key)
         encrypted_dict = base64.b64encode(encrypted_dict).decode()
@@ -129,6 +131,7 @@ class Blockchain:
             block_dict = {
             'username': block.username,
             'ip_address': block.ip,
+            'port': block.port,
             'index': block.index,
             'timestamp': block.timestamp,
             'data': block.data,
@@ -185,6 +188,7 @@ class Blockchain:
                         block.contacts = eval(block.data['contacts'])
                         self.current_block = block
                         self.current_block.ip = block.ip
+                        self.current_block.port = block.port
                         self.current_block.contacts = block.contacts
                         self.current_block.index = block.index
                         return True
@@ -221,6 +225,8 @@ class Blockchain:
             if self.validate_chain():
                 block_dict = {
                 'username': self.current_block.username,
+                'ip': self.current_block.ip,
+                'port': self.current_block.port,
                 'index': self.current_block.index,
                 'timestamp': self.current_block.timestamp,
                 'data': self.current_block.data,
