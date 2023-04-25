@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, redirect, session, abort
 from blockchain_alt import Blockchain
-from flask_socketio import SocketIO, send, emit, join_room, leave_room
+from flask_socketio import SocketIO, emit
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import socket
@@ -67,7 +67,7 @@ def signup():
         print(blockchain.used_names)
         if username not in list(blockchain.used_names.keys()):
             try:
-                blockchain.add_user(username=username, key=key, ip=get_remote_address())
+                blockchain.add_user(username=username, key=key, ip=get_remote_address(), port=request.environ['REMOTE_PORT'])
                 return redirect('/login')
             except Exception:
                 message = "Failed to signup!"
@@ -95,9 +95,12 @@ def login():
                 session['user'] = Peer(session[username], blockchain.current_block.ip, request.environ['REMOTE_PORT'])
             else:
                 blockchain.current_block.ip = get_remote_address()
-                blockchain.used_names[session['username']] = blockchain.current_block.ip
+                blockchain.used_names[session['username']][0] = blockchain.current_block.ip
                 session['user'] = Peer(session[username], blockchain.current_block.ip, request.environ['REMOTE_PORT'])
                 
+                # Updating the global blockchain
+                blockchain.update_chain()
+
             # Set the user's session cookie to permanent
             session.permanent = True
 
@@ -121,8 +124,8 @@ def home():
             if not search:
                 return render_template('home.html', contacts=contacts)
             else:
-                room = f"{username}_{search}"
-                return redirect('/chat')
+                if search in session[contacts]:
+                    return redirect('/chat')
 
         return render_template('home.html', contacts=contacts)
     else:
@@ -145,13 +148,11 @@ def add_contact():
             if (len(name) and len(user)) and name in blockchain.used_names:
                 contact = name
                 # create peer
-                session['contacts'][contact] =  {"messages":[]}
-
-                # Emit a message to the contact to inform them of the new room
-                emit('new_contact', {'username': user}, room=room)
-
+                session['contacts'][contact] =  {"messages":[], "peers":(Peer(user, blockchain.current_block.ip, request.environ['REMOTE_PORT']), Peer(name, blockchain.used_names['name'], request.environ['REMOTE_PORT']))}
                 blockchain.current_block.contacts = session['contacts']
                 blockchain.update_chain()
+                message = "Contact added successfully!"
+                
             else:
                 message = 'Failed to add contact!'
         else:
@@ -166,7 +167,7 @@ class Peer:
         self.ip_address = ip_address
         self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.connected_peers = []
+        self.connected_peers = [username for username in list(blockchain.used_names.keys())]
         self.lock = threading.Lock()
 
     def start(self):
@@ -216,6 +217,7 @@ def send_message(data):
     recipient = data['recipient']
     message_text = data['message']
     message = f'{socketio.sid}:{recipient}:{message_text}'
+    peers = session['contacts'][recipient]["peers"]
     for peer in [peers]:
         if peer.name == socketio.sid:
             sender = peer
