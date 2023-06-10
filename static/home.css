@@ -44,7 +44,8 @@ $gray: #92959E; */
    
    main {
      height: 100%;
-     display: flex;
+     /* display: flex; */
+     z-index: 2;
      align-items: center;
      justify-content: center;
      vertical-align: center;
@@ -57,6 +58,28 @@ $gray: #92959E; */
     margin: 0 auto;
     padding: 20px;
 }
+
+.back-button {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  z-index: 2;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  text-align: center;
+  justify-content: center;
+  color: white;
+  background-color: #4CAF50;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #3e8e41;
+}
+
 p.coding {
     font-family:"Lucida Console";
     width: 35px;
@@ -94,6 +117,7 @@ input[type=submit]{
   transition: border-bottom-color 0.4s,border-top-color 0.4s, border-left-color 0.4s,border-right-color 0.4s,background-color 0.4s;
     width: 50px;
     height: 35px;
+    z-index: 999;
     background: #1cec05;
     border: 1px solid #fff;
     cursor: pointer;
@@ -131,7 +155,7 @@ input[type=submit]:hover{
   border-top-width: 2px;
 }
 
-a[href^="/chat?contact="] {
+a[href^="/chat/"] {
   background-color: #1eff00;
   text-decoration: none;
   transition: border-bottom-color 0.4s,border-top-color 0.4s, border-left-color 0.4s,border-right-color 0.4s,background-color 0.4s;
@@ -139,14 +163,14 @@ a[href^="/chat?contact="] {
    border-top-color: #004424;
     border-left-color: #2b8800;
      border-right-color: #2b8800;
-  z-index: 2;
+  z-index: 100;
   border-style: solid;
   border-width: 5px;
   border-bottom-width: 7px;
   border-top-width: 2px;
   }
 
-  a[href^="/chat?contact="]:hover{
+  a[href^="/chat/"]:hover{
     background-color: #5dd700;
       transition: border-bottom-color 0.4s,border-top-color 0.4s, border-left-color 0.4s,border-right-color 0.4s,background-color 0.4s;
       border-bottom-color: #004424;
@@ -173,6 +197,21 @@ a[href^="/chat?contact="] {
     border-bottom-width: 7px;
     border-top-width: 2px;
     }
+
+    a[href^="/"] {
+      background-color: #1eff00;
+      text-decoration: none;
+      transition: border-bottom-color 0.4s,border-top-color 0.4s, border-left-color 0.4s,border-right-color 0.4s,background-color 0.4s;
+      border-bottom-color: #6bdd00;
+       border-top-color: #004424;
+        border-left-color: #2b8800;
+         border-right-color: #2b8800;
+      z-index: 2;
+      border-style: solid;
+      border-width: 5px;
+      border-bottom-width: 7px;
+      border-top-width: 2px;
+      }
   
     a[href^="/add_contact/"]:hover{
       background-color: #5dd700;
@@ -214,7 +253,7 @@ p.head{
   z-index: 1;
   align-items: center;
   justify-content: center;
-  vertical-align: center;
+  vertical-align: top;
 }
 
 #navIcon {

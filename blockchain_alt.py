@@ -8,7 +8,7 @@ import firebase_admin
 from firebase_admin import db
 from firebase_admin import credentials
 # Importing my own encrption file and necessary libraries
-import encrypt
+import encryption.encrypt as encrypt
 import base64
 import json
 
@@ -71,6 +71,19 @@ class UserBlock(Block):
           }
         super().__init__(index, timestamp, previous_hash, self.key)
 
+    def to_dict(self):
+        return {
+            'username': self.username,
+            'ip': self.ip,
+            'port': self.port,
+            'index': self.index,
+            'timestamp': self.timestamp,
+            'data': self.data,
+            'previous_hash': self.previous_hash,
+            'nonce': self.nonce,
+            'hash': self.hash
+        }
+
 
 
 # Define the Blockchain class
@@ -87,9 +100,10 @@ class Blockchain:
 
         self.current_block = None
     
-    @functools.lru_cache(maxsize=128)
+    # @functools.lru_cache(maxsize=128)
     def load_chain(self):
         chain = []
+        user_ids = []
         db_ref = db.reference('user_blocks')
         blocks_data = db_ref.get()
         if blocks_data:
@@ -97,15 +111,16 @@ class Blockchain:
                 block_data = blocks_data[user_id]
                 block = UserBlock(
                     index=block_data['index'],
-                    ip= block_data['ip_address'],
+                    ip= block_data['ip'],
                     timestamp=block_data['timestamp'],
                     port=block_data['port'],
                     key = "", 
                     previous_hash=block_data['previous_hash'],
                     username=block_data['username']
                 )
-                self.used_names[block_data['user_name']] = [block_data['ip_address'], block_data['port']]
-                self.user_ids.append(user_id)
+                self.used_names[block_data['username']] = [block_data['ip'], block_data['port'], user_id]
+                # self.user_ids.add(user_id)
+                # self.user_ids = set(sorted(list(self.user_ids, key=lambda b: b.index)))
                 block.data = block_data['data']
                 block.hash = block_data['hash']
                 block.nonce = block_data['nonce']
@@ -113,6 +128,7 @@ class Blockchain:
         else:
             pass
         chain = sorted(chain, key=lambda b: b.index)
+        self.user_ids = user_ids
         return chain
 
 
@@ -130,7 +146,7 @@ class Blockchain:
         if self.validate_chain():
             block_dict = {
             'username': block.username,
-            'ip_address': block.ip,
+            'ip': block.ip,
             'port': block.port,
             'index': block.index,
             'timestamp': block.timestamp,
@@ -185,6 +201,7 @@ class Blockchain:
                     # Check if the calculated hash matches the hash of the user block
                     if hash == block.hash:
                         block.key = key
+                        print(block.data['contacts'])
                         block.contacts = eval(block.data['contacts'])
                         self.current_block = block
                         self.current_block.ip = block.ip
@@ -195,9 +212,8 @@ class Blockchain:
                     else:
                         print("hash not matching")
                         return False
-                except Exception:
+                except ValueError:
                     print('incorrect key')
-                    return False
         
         return False
     
@@ -205,8 +221,13 @@ class Blockchain:
        db_ref = db.reference('user_blocks')
        if self.current_block != None:
         if self.current_block.username in self.used_names:
-            index = self.used_names.index(self.current_block.username)
-            user_id = self.user_ids[index]  
+            # names = list(self.used_names.keys())
+            # print(names)
+            # index = names.index(self.current_block.username)
+            # print(self.user_ids)
+            user_id = self.used_names[self.current_block.username][-1]  
+            print(user_id)
+            print(self.current_block.key)
             data = {
             "key": self.current_block.key,
             "contacts": str(self.current_block.contacts)
@@ -216,8 +237,8 @@ class Blockchain:
             encrypted_dict = encrypt.encrypt_dict(json.dumps(data), self.current_block.key)
             encrypted_dict = base64.b64encode(encrypted_dict).decode()
 
-            self.contacts = dict()
-            self.key = ''
+            self.current_block.contacts = dict()
+            self.current_block.key = ''
 
             self.current_block.data = encrypted_dict
             self.chain[self.current_block.index] = self.current_block

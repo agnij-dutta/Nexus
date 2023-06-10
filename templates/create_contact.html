@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" text="text/css" href="{{ url_for('static', filename='home.css') }}">
+    <title>Add Contact</title>
+    <script type="text/javascript">
+        function goBack() {
+            window.history.back();
+        }
+
+        document.getElementById("backBtn").addEventListener("click", goBack);
+    </script>
+</head>
+<body>
+
+    <header id="header">
+        <button onclick="goBack()" class="back-button" id="backBtn">⬅</button>
+        <p class="head">Search User</p>
+        <form action="" method="post">
+            <input class="cod" type="text" name="search" placeholder="Search User" id="contact_name">
+            <input class="coding" type="submit" value="🔍"><br>
+        </form>
+    </header>
+    <canvas id="Matrix"></canvas>
+    <main id="main">
+        {% for user in random_users %}
+        <input class="coding" name = "button" type="submit" value="{{user}}">
+        {% endfor %}
+        <p class="head">{{message}}</p>
+    </main>
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+    <script type="text/javascript">
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      var grd = ctx.createLinearGradient(0, 0, 600, 600);
+
+      grd.addColorStop(0, "#FF0000");
+      grd.addColorStop(1, "#00FF00");
+
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, 600, 600);
+    </script>
+    <script>
+    function selectUser(user) {
+        document.getElementById('contact_name').value = user;
+    }
+    </script>
+</body>
+</html>

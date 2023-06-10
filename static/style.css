@@ -40,6 +40,8 @@
      vertical-align: center;
      font-family: 'Space Mono', sans-serif;
    }
+
+   
    
    form{
     font-family: Arial;
@@ -47,19 +49,44 @@
     margin: 0 auto;
     padding: 20px;
 }
+
+.contact {
+  z-index: 2;
+	position: relative;
+	margin-bottom: 1rem;
+	padding-left: 5rem;
+	height: 4.5rem;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.contact li {
+  z-index: 2;
+  margin: 0;
+  padding: 0;
+  margin-right: 10px;
+  float: left;
+  cursor: pointer;
+  align-items: left;
+  justify-content: left;
+  vertical-align: center;
+}
+
 p.coding{
     font-family:"Lucida Console";
     width: 20px;
     height: 10px;
     font-size: 20px;
     color: #2b8800;
-    z-index: 1;
+    z-index: 2;
     align-items: center;
     justify-content: center;
     vertical-align: center;
 }
 
 p.head{
+  margin-top: 0;
   font-family:"Lucida Console";
   font-size: 40px;
   color: #3cff01;
@@ -68,6 +95,8 @@ p.head{
   align-items: center;
   justify-content: center;
   vertical-align: center;
+  margin: 0;
+  padding: 0;
 }
 
 #navIcon {
