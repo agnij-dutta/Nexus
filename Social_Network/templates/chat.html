@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <title>Chat with {{ contact }}</title>
+    <script src="https://cdn.socket.io/socket.io-3.1.0.min.js"></script>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            var backBtn = document.getElementById("backBtn");
+            backBtn.addEventListener("click", goBack);
+
+            var socket = io.connect('http://{{ recipient_ip }}:{{ recipient_port }}');
+
+            socket.on("{{ username }}", function(data) {
+                var messageElement = document.createElement('div');
+                messageElement.innerText = data.sender + ': ' + data.message;
+                document.getElementById('outgoing').appendChild(messageElement);
+            });
+
+            function goBack() {
+                window.history.back();
+            }
+
+            function sendMessage() {
+                var message = document.getElementById("message-input").value;
+                var data = "{{ data }}";
+                socket.emit('send_message', data);
+                document.getElementById("message-input").value = "";
+                messageInput.value = "";
+            }
+
+            var sendMessageButton = document.getElementById("send-message-button");
+            sendMessageButton.addEventListener("click", sendMessage);
+        });
+    </script>
+</head>
+<body>
+    <header id="header">
+        <button class="back-button" id="backBtn">⬅</button>
+    </header>
+
+    <div class="container">
+        <div class="msg-header">
+            <div class="container1">
+                <div class="active">
+                    <p>{{ contact }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-page">
+            <div class="msg-inbox">
+                <div class="chats">
+                    {% for message in messages %}
+                    <p class="head">{{ message['message'] }}</p>
+                    {% endfor %}
+                    <form action="" method="post">
+                        <input class="cod" type="text" name="message_input" placeholder="Enter message..." id="message">
+                        <input class="coding" type="submit" value="">
+                    </form>
+                    
+                </div>
+            </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

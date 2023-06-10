@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" text="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>NEXUS - Login</title>
+  </head>
+  <body>
+    <canvas id="Matrix"></canvas>
+    <main id="main">
+    <form action="/login" method="post">
+      <p class="head">Login</p>
+      <input class="cod" type="text" name="name" placeholder="Username"><br>
+      <input class="cod" type="text" name="key" placeholder="key(16 characters)"><br>
+      <input class="coding" type="submit" value="Login"><br><br>
+      <a href="/signup" class="coding">Or Sign Up</a> <br>
+      <p class="head">{{message}}</p>
+
+
+    </main>
+
+      <!-- HEADER -->
+      <header class="header">
+
+        <div id="navIcon">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <nav class="nav-container" id="navHomeCustom">
+          <ul class="nav-ul"></ul>
+        </nav>
+        <nav class="nav-container hidden" id="navHomeRegular">
+          <ul class="nav-ul"></ul>
+        </nav>
+      </header>
+      <!-- //HEADER -->
+
+    <!-- //TABS -->
+		<div class="tab-content">
+    
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+    <script type="text/javascript">
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      var grd = ctx.createLinearGradient(0, 0, 600, 600);
+
+      grd.addColorStop(0, "#FF0000");
+      grd.addColorStop(1, "#00FF00");
+
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, 600, 600);
+    </script>
+  </body>
+</html>
+

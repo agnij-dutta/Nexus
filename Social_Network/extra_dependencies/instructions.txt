@@ -1,0 +1,42 @@
+To host a Flask website on Firebase, you can follow these general steps:
+
+Create a Firebase project and set up Firebase Hosting. You can do this by following the official Firebase Hosting 
+setup guide.
+
+Set up a Flask application that is ready to be deployed. This includes installing all necessary packages, defining 
+routes, and creating templates.
+
+Create a file named firebase.json in the root directory of your Flask application. This file will contain the 
+Firebase Hosting configuration.
+
+Add the following code to firebase.json:
+
+json
+{
+  "hosting": {
+    "public": "public",
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "flaskApp"
+      }
+    ]
+  }
+}
+This code tells Firebase Hosting to use a Firebase Cloud Function called flaskApp to handle all requests to the
+website.
+
+Install the Firebase CLI by running npm install -g firebase-tools in your terminal.
+
+Log in to Firebase by running firebase login in your terminal.
+
+Initialize Firebase in your project by running firebase init in your terminal. Follow the prompts to set up 
+Firebase Hosting.
+
+Deploy your Flask application by running firebase deploy in your terminal. Firebase will build and deploy your 
+application to Firebase Hosting.
+
+Wait for the deployment to complete, and then visit your website's URL to see it in action.
+
+That's it! Your Flask website should now be hosted on Firebase Hosting. If you encounter any issues during the 
+process, refer to the official Firebase Hosting documentation or seek assistance from the Firebase community.

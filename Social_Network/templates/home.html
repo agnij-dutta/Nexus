@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" text="text/css" href="{{ url_for('static', filename='home.css') }}">
+	<title>Home Page</title>
+  <script type="text/javascript">
+    // Add event listener to the navIcon button
+    document.getElementById("navIcon").addEventListener("click", function() {
+      this.classList.toggle("open");
+      document.getElementById("navHomeCustom").classList.toggle("hidden");
+      document.getElementById("navHomeRegular").classList.toggle("hidden");
+    });
+  
+    // Set the value of the username dynamically
+    document.querySelector("#navHomeCustom ul li:nth-child(3) a").textContent = "{{ username }}";
+  
+    // Add a "Creator" text to the footer
+    var footer = document.querySelector("footer");
+    var credit = document.createElement("p");
+    credit.textContent = "Created by [Agnij Dutta]";
+    footer.appendChild(credit);
+  </script>  
+</head>
+<body>
+
+  <header id="header">
+    <div id="navIcon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav class="nav-container" id="navHomeCustom">
+      <ul class="nav-ul">
+        <li><a href="/" class="coding">Home</a></li>
+        <li><a href="/edit_profile/{{username}}" class="coding">{{username}}</a></li>
+      </ul>
+    </nav>
+    <form action = "/" method="post">
+      <input class="cod" type="text" name="search" placeholder="Search">
+      <input class="coding" type="submit" value="🔍"><br><br>
+      <a href="/add_contact/" class="coding">Add Contact</a>
+    </form>
+    <p class="head">Contacts</p>
+  </header>
+	<canvas id="Matrix"></canvas>
+  <main id="main">
+      {% for contact in contacts %}
+      <a href="/chat/" class="coding">Chat with {{contact}}</a><br>
+      <!-- <a href="{{ url_for('chat', contact=contact) }}" class="coding">{{contact}}</a><br> -->
+      {% endfor %}
+  </main>
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+    <script type="text/javascript">
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      var grd = ctx.createLinearGradient(0, 0, 600, 600);
+
+      grd.addColorStop(0, "#FF0000");
+      grd.addColorStop(1, "#00FF00");
+
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, 600, 600);
+    </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+cred = credentials.Certificate("C:/Users/Anutosh/Desktop/Social_Network/nexus-online-firebase-adminsdk-msrak-5553de8c19.json")
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://nexus-online-default-rtdb.asia-southeast1.firebasedatabase.app'
+})
+
+
+firebase_api_key = "AIzaSyAYMV0EfRZl8AUsruuEPZ085oTUBX4bfMc"
+firebase_project_id = "nexus-online"
+
+
+crypt_key = esmmb5r8u6zveps5
