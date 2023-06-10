@@ -5,7 +5,7 @@ Installation
 
 Clone the repository:
 
-git clone https://github.com/yourusername/Social-Network-Nexus-Online.git
+git clone https://github.com/yourusername/Nexus.git
 
 Install the dependencies: cd social-network-nexus-online pip install -r requirements.txt
 
